@@ -195,4 +195,4 @@ class Frame:
                 column += 1
         
         #if no 4-in-a-row
-        return 0     
+        return 0
