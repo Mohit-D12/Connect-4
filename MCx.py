@@ -1,7 +1,7 @@
 from MonteCarloTreeSearch import MonteCarloTreeSearch
 from Frame import Frame
 
-class MC:
+class MCx:
 
     def __init__(self, iterations, exploratory_factor) -> None:
 
