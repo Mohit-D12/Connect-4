@@ -3,7 +3,7 @@ from MC200 import MC200
 from MC40 import MC40
 from time import time
 
-class Game_Manager:
+class GameManager:
     
     def __init__(self):
         self.frame = Frame()
@@ -59,3 +59,4 @@ class Game_Manager:
 
     def display_board(self):
         self.frame.print_frame() 
+        

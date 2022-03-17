@@ -3,33 +3,31 @@ from Frame import Frame
 from math import *
 
 class MonteCarloTreeSearch:
-
     score = { 'draw': 1, 'win': 1, 'lose': 0 } 
     
     def __init__(self, frame, exploratory_factor):
-
         self.frame : Frame = frame
         self.root : Node = Node(frame)
         self.exploratory_factor = exploratory_factor
         
     def monte_carlo_tree_search(self, iterations):
 
+        #self.debug_frame()
         for iteration in range(iterations):
             if self.root.winner > 0 or self.root.ended:
                 return -1
             self.iterate()
+            #self.debug(iteration)
         
-        action, val = self.get_best_move()
-        return action, val
+        action = self.get_best_move()
+        return action
 
     def get_best_move(self):
-
         if self.root.winner > 0 or self.root.ended:
             return -1
         
         result = -1
         action = -1
-        sim = -1
         children = self.root.get_children_list()
         
         for child in children:
@@ -38,8 +36,7 @@ class MonteCarloTreeSearch:
                 result = current_average_wins
                 action = child.action
                 
-                
-        return action, result
+        return action
        
     def iterate(self):
         
@@ -50,8 +47,6 @@ class MonteCarloTreeSearch:
         
         while current.has_children():
             current = self.select(current)
-            if current == None:
-                return
         
         if current.winner > 0:
             if current.winner == self.root.player:
@@ -80,7 +75,6 @@ class MonteCarloTreeSearch:
         self.backpropagate(current, simulation_score)
     
     def select(self, node):
-
         children = node.get_children_list()
         ucb_score = {}
         selected_child, max_ucb_score = None, 0
@@ -114,7 +108,6 @@ class MonteCarloTreeSearch:
             node.add_child(child)
     
     def simulate(self, node):
-
         #returns winner or 0 if drawn
         frame: Frame = node.frame
         
@@ -128,7 +121,6 @@ class MonteCarloTreeSearch:
             frame = frame.play_move(move)
     
     def backpropagate(self, node: Node, score):
-
         while True:
             node.simulations += 1
             node.win_counter += score
@@ -136,3 +128,21 @@ class MonteCarloTreeSearch:
             if node == self.root:
                 return
             node = node.parent
+  
+# debugging 
+    def debug(self, iteration):
+        file = open("DebugTree.txt", "a")
+        file.writelines (["Iteration: "+ str(iteration+1) + "\n"])
+        file.close()
+        self.root.other_name()
+    
+    def debug_frame(self):
+        file = open("DebugTree.txt", "w")
+        s = ""
+        for i in self.frame.frame:
+            for j in i:
+                s += str(j) + " "
+            s += "\n"
+        file.write(s)
+        file.close()
+ 
